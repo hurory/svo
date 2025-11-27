@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>ГосПризыв — Уведомление о явке</title>
+<style>
+  body{
+    background:#f4f6f9;
+    font-family: Inter, "Segoe UI", Arial, sans-serif;
+    padding:0;
+    margin:0;
+  }
+
+  /* Загрузка */
+  #loader {
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:#1b2a38;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    flex-direction:column;
+    color:white;
+    font-size:18px;
+    font-weight:700;
+    z-index:9999;
+  }
+
+  .dots span{
+    display:inline-block;
+    width:10px;
+    height:10px;
+    margin:0 4px;
+    background:white;
+    border-radius:50%;
+    animation: blink 1s infinite;
+  }
+  .dots span:nth-child(2){animation-delay:0.2s;}
+  .dots span:nth-child(3){animation-delay:0.4s;}
+  @keyframes blink{
+    0%, 80%, 100%{opacity:0;}
+    40%{opacity:1;}
+  }
+
+  /* Документ */
+  #doc{
+    max-width:720px;
+    background:white;
+    margin:0 auto;
+    padding:32px 42px 48px;
+    border-radius:10px;
+    box-shadow:0 8px 28px rgba(0,0,0,0.12);
+    border:1px solid #dbe1e8;
+    position:relative;
+    display:none; /* скрыт пока идет загрузка */
+    margin-top:40px;
+  }
+
+  .header{
+    text-align:center;
+    border-bottom:2px solid #1b2a38;
+    padding-bottom:14px;
+    margin-bottom:24px;
+  }
+  .header .main{
+    font-weight:900;
+    font-size:24px;
+    color:#1b2a38;
+    letter-spacing:1px;
+  }
+  .header .sub{
+    font-size:14px;
+    color:#54616e;
+    margin-top:6px;
+    font-weight:600;
+  }
+  .num-date{
+    display:flex;
+    justify-content:space-between;
+    font-size:14px;
+    color:#54616e;
+    font-weight:700;
+    margin-bottom:18px;
+  }
+  .title{
+    text-align:center;
+    text-transform:uppercase;
+    font-weight:900;
+    font-size:20px;
+    margin-bottom:20px;
+    color:#1b2a38;
+  }
+  .row{
+    display:flex;
+    justify-content:space-between;
+    font-size:15px;
+    margin-bottom:12px;
+  }
+  .label{color:#54616e; font-weight:600;}
+  .value{color:#1b2a38; font-weight:800;}
+  .section{
+    background:#f9fafb;
+    border-left:4px solid #1b2a38;
+    padding:14px 22px;
+    border-radius:6px;
+    margin-bottom:16px;
+  }
+  .section strong{
+    font-size:16px;
+    color:#1b2a38;
+  }
+  ul{
+    padding-left:20px;
+    margin-top:10px;
+  }
+  li{
+    margin-bottom:8px;
+    font-weight:700;
+    color:#1b2a38;
+    font-size:15px;
+  }
+  .notice{
+    border-left:4px solid #b03333;
+    background:linear-gradient(90deg, rgba(176,51,51,0.06), transparent);
+    color:#b03333;
+    padding:10px 16px;
+    border-radius:6px;
+    font-weight:800;
+    font-size:15px;
+    margin-top:8px;
+  }
+  .footer{
+    margin-top:32px;
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+  }
+  .sign .line{
+    width:200px;
+    border-bottom:2px solid #1b2a38;
+    margin-top:32px;
+  }
+  .sign .text{
+    font-weight:900;
+    font-size:15px;
+    color:#1b2a38;
+  }
+  .barcode{
+    width:180px;
+    height:38px;
+    background: repeating-linear-gradient(90deg,#0e0e0e 0 2px,transparent 2px 6px);
+    border-radius:4px;
+    opacity:0.92;
+  }
+  .btn{margin-top:14px; padding:10px 14px; border:0; border-radius:6px; font-weight:800; cursor:pointer}
+  .btn-print{background:#1b2a38; color:white}
+  @media(max-width:600px){
+    #doc{padding:22px 26px 36px;}
+    .header .main{font-size:20px;}
+  }
+</style>
+</head>
+<body>
+
+<div id="loader">
+  Проверка данных<span class="dots"><span></span><span></span><span></span></span>
+</div>
+
+<div id="doc">
+  <div class="header">
+    <div class="main">ГосПризыв</div>
+    <div class="sub">Система стратегического отбора учащихся</div>
+    <div class="sub" style="margin-top:8px;font-size:13px;font-weight:700;">
+      Колледж‑школа им. академика К.А. Сагинова
+    </div>
+  </div>
+
+  <div class="num-date">
+    <div>Код документа: GPR‑2025‑417</div>
+    <div>Дата выдачи: <span id="issueDate"></span></div>
+  </div>
+
+  <div class="title">Уведомление о явке</div>
+
+  <div class="section">
+    <div class="row"><span class="label">Ф.И. учащегося:</span><span class="value">Дмитрий Топильский</span></div>
+    <div class="row"><span class="label">Дата рождения:</span><span class="value">24 июня 2010</span></div>
+    <div class="row"><span class="label">Учебное заведение:</span><span class="value">Колледж‑школа им. К.А. Сагинова</span></div>
+  </div>
+
+  <div class="section">
+    <strong>Основание для вызова</strong>
+    <p class="label" style="margin:6px 0 0 0; font-size:14px;">
+      Проведение планового инструктажа, проверка учетных данных учащегося.
+    </p>
+  </div>
+
+  <div class="section">
+    <strong>Ключевые компетенции:</strong>
+    <ul>
+      <li>Ответственность и дисциплина</li>
+      <li>Умение работать в команде</li>
+      <li>Физическая выносливость и внимание</li>
+      <li>Способность к анализу и концентрации</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <div class="row"><span class="label">Дата и время явки:</span><span class="value">01.12.2025 в 10:00</span></div>
+    <div class="row"><span class="label">Место явки:</span><span class="value">Учётный центр военного резерва, кабинет №7</span></div>
+  </div>
+
+  <div class="notice">
+    В случае неявки — будут проведены дополнительные меры уведомления.
+  </div>
+
+  <div class="footer">
+    <div class="sign">
+      <div class="sign text">Уполномоченный инспектор отбора</div>
+      <div class="line"></div>
+    </div>
+    <div style="text-align:center">
+      <div class="label">Код учёта</div>
+      <div class="barcode"></div>
+      <button class="btn btn-print" onclick="window.print()">Печать</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // подставляем сегодняшнюю дату
+  const d = new Date();
+  const dateStr = d.getDate().toString().padStart(2,'0')+'.'+(d.getMonth()+1).toString().padStart(2,'0')+'.'+d.getFullYear();
+  document.getElementById('issueDate').textContent = dateStr;
+
+  // Анимация загрузки: 3 секунды
+  setTimeout(()=>{
+    document.getElementById('loader').style.display='none';
+    document.getElementById('doc').style.display='block';
+  }, 3000);
+</script>
+
+</body>
+</html>
